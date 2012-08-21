@@ -45,13 +45,32 @@ grid = [[8, 2 ,22 ,97 ,38 ,15 ,0 ,40 ,0, 75, 04, 05, 07, 78, 52, 12, 50, 77, 91,
         [20, 73 ,35 ,29 ,78 ,31 ,90 ,1 ,74, 31, 49, 71, 48, 86, 81, 16, 23, 57, 5, 54],
         [1, 70 ,54 ,71 ,83 ,51 ,54 ,69 ,16, 92, 33, 48, 61, 43, 52, 1, 89, 19, 67, 48]]
 
+adj = 4
+n = 20
+
 greatest = -1
-for i in range(16):
-    for j in range(16):
-        hori = reduce(lambda x,y: x*y, [grid[i][j+k] for k in range(4)])
-        vert = reduce(lambda x,y: x*y, [grid[i+k][j] for k in range(4)])
-        diag = reduce(lambda x,y: x*y, [grid[i+k][j+k] for k in range(4)])
-        curProduct = max(hori,vert,diag)
+
+# Horizontals + verticals
+for i in range(20):
+    for j in range(20):
+        if i + 3 >= n or j + 3 >= n:
+            continue
+        hori = reduce(lambda x,y: x*y, [grid[i][j+k] for k in range(adj)])
+        vert = reduce(lambda x,y: x*y, [grid[i+k][j] for k in range(adj)])
+        curProduct = max(hori,vert)
+        if curProduct > greatest:
+            greatest = curProduct
+
+# Diags
+for i in range(20):
+    for j in range(20):
+        negSlope = -1
+        posSlope = -1
+        if i + 3 < n and j + 3 < n:
+            negSlope = reduce(lambda x,y: x*y, [grid[i+k][j+k] for k in range(adj)])
+        if i - 3 < n and j + 3 < n:
+            posSlope = reduce(lambda x,y: x*y, [grid[i-k][j+k] for k in range(adj)])
+        curProduct = max(negSlope,posSlope)
         if curProduct > greatest:
             greatest = curProduct
 
